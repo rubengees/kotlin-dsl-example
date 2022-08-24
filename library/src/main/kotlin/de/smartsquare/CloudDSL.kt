@@ -14,17 +14,14 @@ class CloudDSL : CloudResource() {
     internal val projects = mutableListOf<Project>()
 
     fun project(name: String, init: Project.() -> Unit): Project {
-        val result = Project(name)
-        result.init()
-        projects.add(result)
-        return result
+        val project = Project(name).apply(init)
+        projects.add(project)
+        return project
     }
 }
 
 fun cloud(init: CloudDSL.() -> Unit): CloudDSL {
-    val result = CloudDSL()
-    result.init()
-    return result
+    return CloudDSL().apply(init)
 }
 
 enum class ProjectEnvironment {
@@ -42,10 +39,9 @@ class Project(internal val name: String) : CloudResource() {
         engine: DatabaseEngine,
         init: Database.() -> Unit
     ): Database {
-        val result = Database(name, engine)
-        result.init()
-        databases.add(result)
-        return result
+        val database = Database(name, engine).apply(init)
+        databases.add(database)
+        return database
     }
 }
 
